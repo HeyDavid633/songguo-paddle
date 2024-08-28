@@ -1,0 +1,69 @@
+
+The source pattern graph in [FusedBnAddActPattern]:
+
+All Tensors:
+  relu_out  add_out  out  bias  z  mean_out  variance_out  reserve_space  x  variance  scale  saved_mean  mean  saved_variance
+
+Input Tensors:
+  z  bias  mean  scale  variance  x
+
+Output Tensors:
+  relu_out  reserve_space  saved_variance  saved_mean  variance_out  mean_out
+
+  pd_op.batch_norm_ : inputs[ x mean variance scale bias ], outputs[ out mean_out variance_out saved_mean saved_variance reserve_space ]
+  pd_op.add : inputs[ out z ], outputs[ add_out ]
+  pd_op.relu : inputs[ add_out ], outputs[ relu_out ]
+
+
+
+The result pattern graph in [FusedBnAddActPattern]:
+
+All Tensors:
+  mean  variance  scale  x  reserve_space  bias  z  saved_variance  saved_mean  variance_out  mean_out  relu_out
+
+Input Tensors:
+  mean  bias  z  variance  scale  x
+
+Output Tensors:
+  reserve_space  saved_variance  saved_mean  variance_out  mean_out  relu_out
+
+  pd_op.fused_bn_add_activation : inputs[ x z scale bias mean variance ], outputs[ relu_out mean_out variance_out saved_mean saved_variance reserve_space ]
+
+
+
+The source pattern graph in [FusedBnAddActGradPattern]:
+
+All Tensors:
+  bias_grad  x_grad  z_grad  out_grad  relu_out_grad  add_out  out  saved_variance  bias  z  mean_out  variance_out  reserve_space  add_out_grad  relu_out1  x  scale_grad  relu_out2  variance  scale  saved_mean  mean
+
+Input Tensors:
+  relu_out_grad  z  bias  relu_out2  mean  scale  variance  x
+
+Output Tensors:
+  bias_grad  x_grad  relu_out1  scale_grad  z_grad
+
+  pd_op.batch_norm_ : inputs[ x mean variance scale bias ], outputs[ out mean_out variance_out saved_mean saved_variance reserve_space ]
+  pd_op.add : inputs[ out z ], outputs[ add_out ]
+  pd_op.relu : inputs[ add_out ], outputs[ relu_out1 ]
+  pd_op.relu_grad : inputs[ relu_out2 relu_out_grad ], outputs[ add_out_grad ]
+  pd_op.add_grad : inputs[ out z add_out_grad ], outputs[ out_grad z_grad ]
+  pd_op.batch_norm_grad : inputs[ x scale bias mean_out variance_out saved_mean saved_variance reserve_space out_grad ], outputs[ x_grad scale_grad bias_grad ]
+
+
+
+The result pattern graph in [FusedBnAddActGradPattern]:
+
+All Tensors:
+  relu_out_grad  bias_grad  z_grad  saved_variance  z  bias  mean_out  variance_out  reserve_space  relu_out1  x  scale  relu_out2  scale_grad  variance  saved_mean  mean  x_grad
+
+Input Tensors:
+  relu_out_grad  relu_out2  mean  bias  z  variance  scale  x
+
+Output Tensors:
+  bias_grad  x_grad  scale_grad  z_grad  variance_out  mean_out  relu_out1
+
+  pd_op.fused_bn_add_activation : inputs[ x z scale bias mean variance ], outputs[ relu_out1 mean_out variance_out saved_mean saved_variance reserve_space ]
+  pd_op.fused_bn_add_activation_grad : inputs[ x scale bias relu_out2 saved_mean saved_variance reserve_space relu_out_grad ], outputs[ x_grad z_grad scale_grad bias_grad ]
+
+
+device name:  NVIDIA A100-PCIE-40GB

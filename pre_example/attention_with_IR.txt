@@ -1,0 +1,1334 @@
+Splited Program (fwd | bwd): 
+ForwardProgram is :
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%12) = "pd_op.sum" (%10, %11) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%13) = "pd_op.divide" (%10, %12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%14) = "pd_op.cast" (%13) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%15) = "pd_op.matmul" (%14, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%15) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+BackwardProgram is:
+{
+}
+
+IR After CommonSubexpressionEliminationPass -------------------
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before fuse_parallel_matmul_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on builtin.module after fuse_parallel_matmul_pass pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-------------------------------------------------------------------------===
+        IRPrinting on builtin.module before remove_assign_out_pass pass
+===-------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===------------------------------------------------------------------------===
+        IRPrinting on builtin.module after remove_assign_out_pass pass
+===------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===--------------------------------------------------------------------------===
+        IRPrinting on builtin.module before conv2d_transpose_filter pass
+===--------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-------------------------------------------------------------------------===
+        IRPrinting on builtin.module after conv2d_transpose_filter pass
+===-------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===--------------------------------------------------------------------===
+        IRPrinting on builtin.module before convert_MEA_to_FA pass
+===--------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-------------------------------------------------------------------===
+        IRPrinting on builtin.module after convert_MEA_to_FA pass
+===-------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===------------------------------------------------------------------===
+        IRPrinting on builtin.module before pd_to_cinn_pass pass
+===------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "pd_op.scale" (%3, %4) {bias:(Float)0,bias_after_scale:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%8) = "pd_op.max" (%6, %7) {keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.sum" (%10, %7) {dtype:(pd_op.DataType)float32,keepdim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<1xi64>) -> builtin.tensor<16x16x128x1xf32>
+    (%12) = "pd_op.divide" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%13) = "pd_op.cast" (%12) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%14) = "pd_op.matmul" (%13, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%14) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-----------------------------------------------------------------===
+        IRPrinting on builtin.module after pd_to_cinn_pass pass
+===-----------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%13) = "pd_op.matmul" (%12, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before dead_code_elimination_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.176777} : () -> builtin.tensor<1xf32>
+    (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%13) = "pd_op.matmul" (%12, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module after dead_code_elimination_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%5) = "pd_op.cast" (%4) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%6) = "cinn_op.reduce_max" (%5) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%7) = "pd_op.subtract" (%5, %6) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%8) = "pd_op.exp" (%7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%9) = "cinn_op.reduce_sum" (%8) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%10) = "pd_op.divide" (%8, %9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.cast" (%10) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%12) = "pd_op.matmul" (%11, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%12) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before fold_manipulation_ops_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%5) = "pd_op.cast" (%4) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%6) = "cinn_op.reduce_max" (%5) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%7) = "pd_op.subtract" (%5, %6) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%8) = "pd_op.exp" (%7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%9) = "cinn_op.reduce_sum" (%8) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%10) = "pd_op.divide" (%8, %9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.cast" (%10) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%12) = "pd_op.matmul" (%11, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%12) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module after fold_manipulation_ops_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%5) = "pd_op.cast" (%4) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%6) = "cinn_op.reduce_max" (%5) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%7) = "pd_op.subtract" (%5, %6) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%8) = "pd_op.exp" (%7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%9) = "cinn_op.reduce_sum" (%8) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%10) = "pd_op.divide" (%8, %9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.cast" (%10) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%12) = "pd_op.matmul" (%11, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%12) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===------------------------------------------------------------------===
+        IRPrinting on builtin.module before build_cinn_pass pass
+===------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%5) = "pd_op.cast" (%4) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+    (%6) = "cinn_op.reduce_max" (%5) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%7) = "pd_op.subtract" (%5, %6) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%8) = "pd_op.exp" (%7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%9) = "cinn_op.reduce_sum" (%8) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+    (%10) = "pd_op.divide" (%8, %9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+    (%11) = "pd_op.cast" (%10) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%12) = "pd_op.matmul" (%11, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%12) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-----------------------------------------------------------------===
+        IRPrinting on builtin.module after build_cinn_pass pass
+===-----------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%12) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%13) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before fold_manipulation_ops_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%12) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%13) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after fold_manipulation_ops_pass pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%12) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%13) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before fold_manipulation_ops_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%12) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%13) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module after fold_manipulation_ops_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%12) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%13) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before dead_code_elimination_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%12) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%13) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module after dead_code_elimination_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%12) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%13) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-----------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before add_broadcast_to_elementwise_pass pass
+===-----------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "pd_op.subtract" (%6, %7) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.exp" (%8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "cinn_op.reduce_sum" (%9) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%11) = "pd_op.divide" (%9, %10) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.cast" (%11) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%12) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%13) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%13) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after add_broadcast_to_elementwise_pass pass
+===----------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "cinn_op.broadcast" (%7) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.reduce_sum" (%10) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%12) = "cinn_op.broadcast" (%11) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.divide" (%10, %12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "pd_op.cast" (%13) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%14) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%15) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%15) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before cinn_dynamic_reshape_op_pass pass
+===------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "cinn_op.broadcast" (%7) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.reduce_sum" (%10) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%12) = "cinn_op.broadcast" (%11) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.divide" (%10, %12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "pd_op.cast" (%13) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%14) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%15) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%15) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after cinn_dynamic_reshape_op_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "cinn_op.broadcast" (%7) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.reduce_sum" (%10) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%12) = "cinn_op.broadcast" (%11) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.divide" (%10, %12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "pd_op.cast" (%13) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%14) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%15) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%15) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before fold_manipulation_ops_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "cinn_op.broadcast" (%7) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.reduce_sum" (%10) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%12) = "cinn_op.broadcast" (%11) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.divide" (%10, %12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "pd_op.cast" (%13) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%14) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%15) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%15) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after fold_manipulation_ops_pass pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "cinn_op.broadcast" (%7) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.reduce_sum" (%10) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%12) = "cinn_op.broadcast" (%11) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.divide" (%10, %12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "pd_op.cast" (%13) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%14) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%15) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%15) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before dead_code_elimination_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "cinn_op.broadcast" (%7) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.reduce_sum" (%10) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%12) = "cinn_op.broadcast" (%11) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.divide" (%10, %12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "pd_op.cast" (%13) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%14) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%15) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%15) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after dead_code_elimination_pass pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "cinn_op.broadcast" (%7) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.reduce_sum" (%10) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%12) = "cinn_op.broadcast" (%11) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.divide" (%10, %12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "pd_op.cast" (%13) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%14) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%15) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%15) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===--------------------------------------------------------------------------===
+        IRPrinting on builtin.module before cinn_group_cluster_pass pass
+===--------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.group" [id:55] () -> builtin.tensor<16x16x128x128xf16> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%8) = "cinn_op.broadcast" (%7) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%9) = "pd_op.subtract" (%6, %8) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%10) = "pd_op.exp" (%9) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.reduce_sum" (%10) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%12) = "cinn_op.broadcast" (%11) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.divide" (%10, %12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "pd_op.cast" (%13) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%14) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%15) = "pd_op.matmul" (%4, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%15) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-------------------------------------------------------------------------===
+        IRPrinting on builtin.module after cinn_group_cluster_pass pass
+===-------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before single_op_fallback_to_phi pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on builtin.module after single_op_fallback_to_phi pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------------===
+        IRPrinting on builtin.module before shape_ops_fallback_to_phi_pass pass
+===---------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===--------------------------------------------------------------------------------===
+        IRPrinting on builtin.module after shape_ops_fallback_to_phi_pass pass
+===--------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion before single_op_fallback_to_phi pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion after single_op_fallback_to_phi pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion before shape_ops_fallback_to_phi_pass pass
+===---------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===--------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion after shape_ops_fallback_to_phi_pass pass
+===--------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion before single_op_fallback_to_phi pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion after single_op_fallback_to_phi pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===---------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion before shape_ops_fallback_to_phi_pass pass
+===---------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===--------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion after shape_ops_fallback_to_phi_pass pass
+===--------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-----------------------------------------------------------------------===
+        IRPrinting on builtin.module before lower_cinn_fusion_op pass
+===-----------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_op.fusion" [id:62] () -> builtin.tensor<16x16x128x1xf32> {
+        (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%6) = "pd_op.cast" (%5) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%7) = "cinn_op.reduce_max" (%6) {dim:[(Int64)-1],keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        () = "cf.yield" (%7) {} : (builtin.tensor<16x16x128x1xf32>) -> 
+    }
+    (%8) = "cinn_op.fusion" [id:73] () -> builtin.tensor<16x16x128x128xf16> {
+        (%9) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.176777,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf16>
+        (%10) = "pd_op.cast" (%9) {dtype:(pd_op.DataType)float32,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x128xf32>
+        (%11) = "cinn_op.broadcast" (%4) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%12) = "pd_op.subtract" (%10, %11) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%13) = "pd_op.exp" (%12) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%14) = "cinn_op.reduce_sum" (%13) {dim:[(Int64)-1],dtype:(pd_op.DataType)float32,keep_dim:true,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x1xf32>
+        (%15) = "cinn_op.broadcast" (%14) {broadcast_axes:[(Int64)0,(Int64)1,(Int64)2,(Int64)3],out_shape:[(Int64)16,(Int64)16,(Int64)128,(Int64)128],stop_gradient:[false]} : (builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%16) = "pd_op.divide" (%13, %15) {stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>, builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf32>
+        (%17) = "pd_op.cast" (%16) {dtype:(pd_op.DataType)float16,stop_gradient:[false]} : (builtin.tensor<16x16x128x128xf32>) -> builtin.tensor<16x16x128x128xf16>
+        () = "cf.yield" (%17) {} : (builtin.tensor<16x16x128x128xf16>) -> 
+    }
+    (%18) = "pd_op.matmul" (%8, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%18) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===----------------------------------------------------------------------===
+        IRPrinting on builtin.module after lower_cinn_fusion_op pass
+===----------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_runtime.jit_kernel" (%3) {kernel_info:(0x7f14dd245850)} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x1xf32>
+    (%5) = "cinn_runtime.jit_kernel" (%3, %4) {kernel_info:(0x7f1365e81850)} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.matmul" (%5, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%6) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===-------------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module before split_generate_shape_into_shape_ops_pass pass
+===-------------------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_runtime.jit_kernel" (%3) {kernel_info:(0x7f14dd245850)} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x1xf32>
+    (%5) = "cinn_runtime.jit_kernel" (%3, %4) {kernel_info:(0x7f1365e81850)} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.matmul" (%5, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%6) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+===------------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module after split_generate_shape_into_shape_ops_pass pass
+===------------------------------------------------------------------------------------------===
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_runtime.jit_kernel" (%3) {kernel_info:(0x7f14dd245850)} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x1xf32>
+    (%5) = "cinn_runtime.jit_kernel" (%3, %4) {kernel_info:(0x7f1365e81850)} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.matmul" (%5, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%6) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+
+Program (fwd | bwd): 
+ForwardProgram is :
+{
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_runtime.jit_kernel" (%3) {kernel_info:(0x7f14dd245850)} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x1xf32>
+    (%5) = "cinn_runtime.jit_kernel" (%3, %4) {kernel_info:(0x7f1365e81850)} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.matmul" (%5, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%6) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+BackwardProgram is empty in test mode.
+
+IR before lowering = {
+    (%0) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"query",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"key",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%2) = "pd_op.data" () {dtype:(pd_op.DataType)float16,name:"value",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> builtin.tensor<16x16x128x32xf16>
+    (%3) = "pd_op.matmul" (%0, %1) {stop_gradient:[false],transpose_x:false,transpose_y:true} : (builtin.tensor<16x16x128x32xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x128xf16>
+    (%4) = "cinn_runtime.jit_kernel" (%3) {kernel_info:(0x7f14dd245850)} : (builtin.tensor<16x16x128x128xf16>) -> builtin.tensor<16x16x128x1xf32>
+    (%5) = "cinn_runtime.jit_kernel" (%3, %4) {kernel_info:(0x7f1365e81850)} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x1xf32>) -> builtin.tensor<16x16x128x128xf16>
+    (%6) = "pd_op.matmul" (%5, %2) {stop_gradient:[false],transpose_x:false,transpose_y:false} : (builtin.tensor<16x16x128x128xf16>, builtin.tensor<16x16x128x32xf16>) -> builtin.tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%6) {output_name:"output_0"} : (builtin.tensor<16x16x128x32xf16>) -> 
+}
+
+IR after lowering = {
+    (%0) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float16,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"data",name:"query",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> undefined_tensor<16x16x128x32xf16>
+    (%1) = "shadow_feed(phi_kernel)" (%0) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    (%2) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float16,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"data",name:"key",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> undefined_tensor<16x16x128x32xf16>
+    (%3) = "shadow_feed(phi_kernel)" (%2) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    (%4) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float16,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"data",name:"value",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> undefined_tensor<16x16x128x32xf16>
+    (%5) = "shadow_feed(phi_kernel)" (%4) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    (%6) = "matmul(phi_kernel)" (%1, %3) {kernel_key:<backend:GPU|layout:NCHW|dtype:float16>,kernel_name:"matmul",op_name:"pd_op.matmul",stop_gradient:[false],transpose_x:false,transpose_y:true} : (gpu_tensor<16x16x128x32xf16>, gpu_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x128xf16>
+    (%7) = "cinn_runtime.jit_kernel" (%6) {kernel_info:(0x7f14dd245850)} : (gpu_tensor<16x16x128x128xf16>) -> gpu_tensor<16x16x128x1xf32>
+    (%8) = "cinn_runtime.jit_kernel" (%6, %7) {kernel_info:(0x7f1365e81850)} : (gpu_tensor<16x16x128x128xf16>, gpu_tensor<16x16x128x1xf32>) -> gpu_tensor<16x16x128x128xf16>
+    (%9) = "matmul(phi_kernel)" (%8, %5) {kernel_key:<backend:GPU|layout:NCHW|dtype:float16>,kernel_name:"matmul",op_name:"pd_op.matmul",stop_gradient:[false],transpose_x:false,transpose_y:false} : (gpu_tensor<16x16x128x128xf16>, gpu_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%9) {output_name:"output_0"} : (gpu_tensor<16x16x128x32xf16>) -> 
+}
+
+IR After inplace -------------------
+{
+    (%0) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float16,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"data",name:"query",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> undefined_tensor<16x16x128x32xf16>
+    (%1) = "shadow_feed(phi_kernel)" (%0) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    (%2) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float16,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"data",name:"key",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> undefined_tensor<16x16x128x32xf16>
+    (%3) = "shadow_feed(phi_kernel)" (%2) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    (%4) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float16,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"data",name:"value",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> undefined_tensor<16x16x128x32xf16>
+    (%5) = "shadow_feed(phi_kernel)" (%4) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    (%6) = "matmul(phi_kernel)" (%1, %3) {kernel_key:<backend:GPU|layout:NCHW|dtype:float16>,kernel_name:"matmul",op_name:"pd_op.matmul",stop_gradient:[false],transpose_x:false,transpose_y:true} : (gpu_tensor<16x16x128x32xf16>, gpu_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x128xf16>
+    (%7) = "cinn_runtime.jit_kernel" (%6) {kernel_info:(0x7f14dd245850)} : (gpu_tensor<16x16x128x128xf16>) -> gpu_tensor<16x16x128x1xf32>
+    (%8) = "cinn_runtime.jit_kernel" (%6, %7) {kernel_info:(0x7f1365e81850)} : (gpu_tensor<16x16x128x128xf16>, gpu_tensor<16x16x128x1xf32>) -> gpu_tensor<16x16x128x128xf16>
+    (%9) = "matmul(phi_kernel)" (%8, %5) {kernel_key:<backend:GPU|layout:NCHW|dtype:float16>,kernel_name:"matmul",op_name:"pd_op.matmul",stop_gradient:[false],transpose_x:false,transpose_y:false} : (gpu_tensor<16x16x128x128xf16>, gpu_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%9) {output_name:"output_0"} : (gpu_tensor<16x16x128x32xf16>) -> 
+}
+
+LoweredProgram( AfterPass ) is :
+{
+    (%0) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float16,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"data",name:"query",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> undefined_tensor<16x16x128x32xf16>
+    (%1) = "shadow_feed(phi_kernel)" (%0) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    (%2) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float16,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"data",name:"key",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> undefined_tensor<16x16x128x32xf16>
+    (%3) = "shadow_feed(phi_kernel)" (%2) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    (%4) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float16,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"data",name:"value",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[16,16,128,32],stop_gradient:[false]} : () -> undefined_tensor<16x16x128x32xf16>
+    (%5) = "shadow_feed(phi_kernel)" (%4) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float16>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    (%6) = "matmul(phi_kernel)" (%1, %3) {kernel_key:<backend:GPU|layout:NCHW|dtype:float16>,kernel_name:"matmul",op_name:"pd_op.matmul",stop_gradient:[false],transpose_x:false,transpose_y:true} : (gpu_tensor<16x16x128x32xf16>, gpu_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x128xf16>
+    (%7) = "cinn_runtime.jit_kernel" (%6) {kernel_info:(0x7f14dd245850)} : (gpu_tensor<16x16x128x128xf16>) -> gpu_tensor<16x16x128x1xf32>
+    (%8) = "cinn_runtime.jit_kernel" (%6, %7) {kernel_info:(0x7f1365e81850)} : (gpu_tensor<16x16x128x128xf16>, gpu_tensor<16x16x128x1xf32>) -> gpu_tensor<16x16x128x128xf16>
+    (%9) = "matmul(phi_kernel)" (%8, %5) {kernel_key:<backend:GPU|layout:NCHW|dtype:float16>,kernel_name:"matmul",op_name:"pd_op.matmul",stop_gradient:[false],transpose_x:false,transpose_y:false} : (gpu_tensor<16x16x128x128xf16>, gpu_tensor<16x16x128x32xf16>) -> gpu_tensor<16x16x128x32xf16>
+    () = "builtin.shadow_output" (%9) {output_name:"output_0"} : (gpu_tensor<16x16x128x32xf16>) -> 
+}
+
+all prim enabled:  True
+device name:  NVIDIA A100-PCIE-40GB
+all prim enabled:  True
+all prim enabled:  True
+all prim enabled:  True
+all prim enabled:  True

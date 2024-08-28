@@ -1,0 +1,1373 @@
+Splited Program (fwd | bwd): 
+ForwardProgram is :
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+BackwardProgram is:
+{
+}
+
+IR After CommonSubexpressionEliminationPass -------------------
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before fuse_parallel_matmul_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on builtin.module after fuse_parallel_matmul_pass pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------------===
+        IRPrinting on builtin.module before remove_assign_out_pass pass
+===-------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===------------------------------------------------------------------------===
+        IRPrinting on builtin.module after remove_assign_out_pass pass
+===------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===--------------------------------------------------------------------------===
+        IRPrinting on builtin.module before conv2d_transpose_filter pass
+===--------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------------===
+        IRPrinting on builtin.module after conv2d_transpose_filter pass
+===-------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===--------------------------------------------------------------------===
+        IRPrinting on builtin.module before convert_MEA_to_FA pass
+===--------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------===
+        IRPrinting on builtin.module after convert_MEA_to_FA pass
+===-------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===------------------------------------------------------------------===
+        IRPrinting on builtin.module before pd_to_cinn_pass pass
+===------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "pd_op.full_int_array" () {dtype:(pd_op.DataType)int64,place:(pd_op.Place)Place(cpu),stop_gradient:[true],value:[(Int64)-1]} : () -> builtin.tensor<1xi64>
+    (%4) = "pd_op.sum" (%2, %3) {dtype:(pd_op.DataType)Undefined,keepdim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1xi64>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%6) = "pd_op.scale" (%4, %5) {bias:(Float)0,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%8) = "pd_op.scale" (%6, %7) {bias:(Float)1e-06,bias_after_scale:true,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.rsqrt" (%8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%11) = "pd_op.multiply" (%10, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%11) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------===
+        IRPrinting on builtin.module after pd_to_cinn_pass pass
+===-----------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%7) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%8) = "pd_op.rsqrt" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.multiply" (%8, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%10) = "pd_op.multiply" (%9, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%10) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before dead_code_elimination_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)0.00130208} : () -> builtin.tensor<1xf32>
+    (%5) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.full" () {dtype:(pd_op.DataType)float32,place:(pd_op.Place)Place(cpu),shape:(pd_op.IntArray)[1],stop_gradient:[true],value:(Float)1} : () -> builtin.tensor<1xf32>
+    (%7) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%8) = "pd_op.rsqrt" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%9) = "pd_op.multiply" (%8, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%10) = "pd_op.multiply" (%9, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%10) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module after dead_code_elimination_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===--------------------------------------------------------------------------===
+        IRPrinting on builtin.module before shape_optimization_pass pass
+===--------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true]} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------------===
+        IRPrinting on builtin.module after shape_optimization_pass pass
+===-------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module before fuse_shape_ops_into_generate_shape_op_pass pass
+===---------------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===--------------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module after fuse_shape_ops_into_generate_shape_op_pass pass
+===--------------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before dead_code_elimination_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module after dead_code_elimination_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before fold_manipulation_ops_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module after fold_manipulation_ops_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===------------------------------------------------------------------===
+        IRPrinting on builtin.module before build_cinn_pass pass
+===------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%3) = "cinn_op.reduce_sum" (%2) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%4) = "cinn_op.scale" (%3) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%5) = "cinn_op.scale" (%4) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%6) = "pd_op.rsqrt" (%5) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+    (%7) = "pd_op.multiply" (%6, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+    (%8) = "pd_op.multiply" (%7, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%8) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------===
+        IRPrinting on builtin.module after build_cinn_pass pass
+===-----------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before fold_manipulation_ops_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after fold_manipulation_ops_pass pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------------===
+        IRPrinting on builtin.module before simplify_dim_expr_pass pass
+===-------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===------------------------------------------------------------------------===
+        IRPrinting on builtin.module after simplify_dim_expr_pass pass
+===------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module before fuse_shape_ops_into_generate_shape_op_pass pass
+===---------------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===--------------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module after fuse_shape_ops_into_generate_shape_op_pass pass
+===--------------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before fold_manipulation_ops_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module after fold_manipulation_ops_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before dead_code_elimination_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module after dead_code_elimination_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before add_broadcast_to_elementwise_pass pass
+===-----------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after add_broadcast_to_elementwise_pass pass
+===----------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before insert_broadcast_pass pass
+===-----------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.multiply" (%7, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%9) = "pd_op.multiply" (%8, %0) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%9) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after insert_broadcast_pass pass
+===----------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "pd_op.expand" (%7, %10) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%12) = "pd_op.multiply" (%11, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%13) = "pd_op.shape" (%12) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%14) = "pd_op.shape" (%0) {stop_gradient:[true]} : (builtin.tensor<768xf32>) -> builtin.tensor<1xi32>
+        (%15) = "pd_op.shape_broadcast" (%13, %14) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%16) = "pd_op.expand" (%0, %15) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%17) = "pd_op.multiply" (%12, %16) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%17) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===--------------------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before fuse_shape_ops_into_generate_shape_op_pass pass
+===--------------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "pd_op.expand" (%7, %10) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%12) = "pd_op.multiply" (%11, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%13) = "pd_op.shape" (%12) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%14) = "pd_op.shape" (%0) {stop_gradient:[true]} : (builtin.tensor<768xf32>) -> builtin.tensor<1xi32>
+        (%15) = "pd_op.shape_broadcast" (%13, %14) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%16) = "pd_op.expand" (%0, %15) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%17) = "pd_op.multiply" (%12, %16) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%17) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after fuse_shape_ops_into_generate_shape_op_pass pass
+===-------------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "cinn_op.generate_shape" (%7) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%7, %11) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%12, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%14) = "pd_op.shape" (%13) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%15) = "cinn_op.generate_shape" () {output_dim_exprs:[(Int64)768],stop_gradient:[true],symbol_bindings:[]} : () -> builtin.tensor<1xi32>
+        (%16) = "pd_op.shape_broadcast" (%14, %15) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%17) = "cinn_op.generate_shape" (%13) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%18) = "pd_op.expand" (%0, %17) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%19) = "pd_op.multiply" (%13, %18) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%19) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before move_generate_shape_ops_to_prologue pass
+===-------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "cinn_op.generate_shape" (%7) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%7, %11) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%12, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%14) = "pd_op.shape" (%13) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%15) = "cinn_op.generate_shape" () {output_dim_exprs:[(Int64)768],stop_gradient:[true],symbol_bindings:[]} : () -> builtin.tensor<1xi32>
+        (%16) = "pd_op.shape_broadcast" (%14, %15) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%17) = "cinn_op.generate_shape" (%13) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%18) = "pd_op.expand" (%0, %17) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%19) = "pd_op.multiply" (%13, %18) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%19) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===------------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after move_generate_shape_ops_to_prologue pass
+===------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%7, %11) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%12, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%14) = "pd_op.shape" (%13) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%15) = "cinn_op.generate_shape" () {output_dim_exprs:[(Int64)768],stop_gradient:[true],symbol_bindings:[]} : () -> builtin.tensor<1xi32>
+        (%16) = "pd_op.shape_broadcast" (%14, %15) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%17) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%18) = "pd_op.expand" (%0, %17) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%19) = "pd_op.multiply" (%13, %18) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%19) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before cinn_dynamic_reshape_op_pass pass
+===------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%7, %11) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%12, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%14) = "pd_op.shape" (%13) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%15) = "cinn_op.generate_shape" () {output_dim_exprs:[(Int64)768],stop_gradient:[true],symbol_bindings:[]} : () -> builtin.tensor<1xi32>
+        (%16) = "pd_op.shape_broadcast" (%14, %15) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%17) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%18) = "pd_op.expand" (%0, %17) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%19) = "pd_op.multiply" (%13, %18) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%19) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after cinn_dynamic_reshape_op_pass pass
+===-----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%7, %11) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%12, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%14) = "pd_op.shape" (%13) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%15) = "cinn_op.generate_shape" () {output_dim_exprs:[(Int64)768],stop_gradient:[true],symbol_bindings:[]} : () -> builtin.tensor<1xi32>
+        (%16) = "pd_op.shape_broadcast" (%14, %15) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%17) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%18) = "pd_op.expand" (%0, %17) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%19) = "pd_op.multiply" (%13, %18) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%19) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before fold_manipulation_ops_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%7, %11) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%12, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%14) = "pd_op.shape" (%13) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%15) = "cinn_op.generate_shape" () {output_dim_exprs:[(Int64)768],stop_gradient:[true],symbol_bindings:[]} : () -> builtin.tensor<1xi32>
+        (%16) = "pd_op.shape_broadcast" (%14, %15) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%17) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%18) = "pd_op.expand" (%0, %17) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%19) = "pd_op.multiply" (%13, %18) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%19) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after fold_manipulation_ops_pass pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%7, %11) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%12, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%14) = "pd_op.shape" (%13) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%15) = "cinn_op.generate_shape" () {output_dim_exprs:[(Int64)768],stop_gradient:[true],symbol_bindings:[]} : () -> builtin.tensor<1xi32>
+        (%16) = "pd_op.shape_broadcast" (%14, %15) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%17) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%18) = "pd_op.expand" (%0, %17) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%19) = "pd_op.multiply" (%13, %18) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%19) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group before dead_code_elimination_pass pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "pd_op.shape" (%7) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.shape" (%1) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%10) = "pd_op.shape_broadcast" (%8, %9) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<3xi32>) -> builtin.tensor<3xi32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%7, %11) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%12, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%14) = "pd_op.shape" (%13) {stop_gradient:[true]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%15) = "cinn_op.generate_shape" () {output_dim_exprs:[(Int64)768],stop_gradient:[true],symbol_bindings:[]} : () -> builtin.tensor<1xi32>
+        (%16) = "pd_op.shape_broadcast" (%14, %15) {stop_gradient:[true]} : (builtin.tensor<3xi32>, builtin.tensor<1xi32>) -> builtin.tensor<3xi32>
+        (%17) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%18) = "pd_op.expand" (%0, %17) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%19) = "pd_op.multiply" (%13, %18) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%19) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on cinn_op.group after dead_code_elimination_pass pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===--------------------------------------------------------------------------===
+        IRPrinting on builtin.module before cinn_group_cluster_pass pass
+===--------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.group" [id:52] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------------===
+        IRPrinting on builtin.module after cinn_group_cluster_pass pass
+===-------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on builtin.module before single_op_fallback_to_phi pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on builtin.module after single_op_fallback_to_phi pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------------===
+        IRPrinting on builtin.module before shape_ops_fallback_to_phi_pass pass
+===---------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===--------------------------------------------------------------------------------===
+        IRPrinting on builtin.module after shape_ops_fallback_to_phi_pass pass
+===--------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===----------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion before single_op_fallback_to_phi pass
+===----------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion after single_op_fallback_to_phi pass
+===---------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===---------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion before shape_ops_fallback_to_phi_pass pass
+===---------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===--------------------------------------------------------------------------------===
+        IRPrinting on cinn_op.fusion after shape_ops_fallback_to_phi_pass pass
+===--------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module before lower_cinn_dynamic_shape_fusion_op pass
+===-------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_op.fusion" [id:78] () -> builtin.tensor<1x-1x768xf32> {
+        (%3) = "pd_op.multiply" (%1, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%4) = "cinn_op.reduce_sum" (%3) {dim:[(Int64)-1],dtype:(pd_op.DataType)Undefined,keep_dim:true,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%5) = "cinn_op.scale" (%4) {bias:(Float)0,bias_after_scale:true,scale:(Float)0.00130208,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%6) = "cinn_op.scale" (%5) {bias:(Float)1e-06,bias_after_scale:true,scale:(Float)1,stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%7) = "pd_op.rsqrt" (%6) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 1], data[NULL]"} : (builtin.tensor<1x-1x1xf32>) -> builtin.tensor<1x-1x1xf32>
+        (%8) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%9) = "pd_op.expand" (%7, %8) {stop_gradient:[true]} : (builtin.tensor<1x-1x1xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%10) = "pd_op.multiply" (%9, %1) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<-1x-1x-1xf32>, builtin.tensor<1x-1x768xf32>) -> builtin.tensor<1x-1x768xf32>
+        (%11) = "cinn_op.generate_shape" (%1) {output_dim_exprs:[(Int64)1,"S0",(Int64)768],stop_gradient:[true],symbol_bindings:[["ShapeSymbolBinding","S0",(Int64)0,(Int64)1]]} : (builtin.tensor<1x-1x768xf32>) -> builtin.tensor<3xi32>
+        (%12) = "pd_op.expand" (%0, %11) {stop_gradient:[true]} : (builtin.tensor<768xf32>, builtin.tensor<3xi32>) -> builtin.tensor<-1x-1x-1xf32>
+        (%13) = "pd_op.multiply" (%10, %12) {stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<-1x-1x-1xf32>) -> builtin.tensor<1x-1x768xf32>
+        () = "cf.yield" (%13) {} : (builtin.tensor<1x-1x768xf32>) -> 
+    }
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module after lower_cinn_dynamic_shape_fusion_op pass
+===------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_runtime.jit_kernel" (%1, %0) {kernel_info:(0x7f5d2f487850)} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===-------------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module before split_generate_shape_into_shape_ops_pass pass
+===-------------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_runtime.jit_kernel" (%1, %0) {kernel_info:(0x7f5d2f487850)} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+===------------------------------------------------------------------------------------------===
+        IRPrinting on builtin.module after split_generate_shape_into_shape_ops_pass pass
+===------------------------------------------------------------------------------------------===
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_runtime.jit_kernel" (%1, %0) {kernel_info:(0x7f5d2f487850)} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+
+Program (fwd | bwd): 
+ForwardProgram is :
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_runtime.jit_kernel" (%1, %0) {kernel_info:(0x7f5d2f487850)} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+BackwardProgram is empty in test mode.
+
+IR before lowering = {
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> builtin.tensor<768xf32>
+    (%1) = "pd_op.data" () {dtype:(pd_op.DataType)float32,name:"hidden_states",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> builtin.tensor<1x-1x768xf32>
+    (%2) = "cinn_runtime.jit_kernel" (%1, %0) {kernel_info:(0x7f5d2f487850)} : (builtin.tensor<1x-1x768xf32>, builtin.tensor<768xf32>) -> builtin.tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%2) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (builtin.tensor<1x-1x768xf32>) -> 
+}
+
+IR after lowering = {
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> gpu_tensor<768xf32>
+    (%1) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float32,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float32>,kernel_name:"data",name:"hidden_states",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> undefined_tensor<1x-1x768xf32>
+    (%2) = "shadow_feed(phi_kernel)" (%1) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float32>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<1x-1x768xf32>) -> gpu_tensor<1x-1x768xf32>
+    (%3) = "cinn_runtime.jit_kernel" (%2, %0) {kernel_info:(0x7f5d2f487850)} : (gpu_tensor<1x-1x768xf32>, gpu_tensor<768xf32>) -> gpu_tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%3) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (gpu_tensor<1x-1x768xf32>) -> 
+}
+
+IR After inplace -------------------
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> gpu_tensor<768xf32>
+    (%1) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float32,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float32>,kernel_name:"data",name:"hidden_states",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> undefined_tensor<1x-1x768xf32>
+    (%2) = "shadow_feed(phi_kernel)" (%1) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float32>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<1x-1x768xf32>) -> gpu_tensor<1x-1x768xf32>
+    (%3) = "cinn_runtime.jit_kernel" (%2, %0) {kernel_info:(0x7f5d2f487850)} : (gpu_tensor<1x-1x768xf32>, gpu_tensor<768xf32>) -> gpu_tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%3) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (gpu_tensor<1x-1x768xf32>) -> 
+}
+
+LoweredProgram( AfterPass ) is :
+{
+    (%0) = "builtin.parameter" () {is_distributed:[false],is_parameter:[true],need_clip:[true],parameter_name:"eager_tmp_0",persistable:[true],stop_gradient:[true],sym_shape_str:"shape[768], data[NULL]",trainable:[false]} : () -> gpu_tensor<768xf32>
+    (%1) = "data(phi_kernel)" () {dtype:(pd_op.DataType)float32,kernel_key:<backend:Undefined|layout:Undefined(AnyLayout)|dtype:float32>,kernel_name:"data",name:"hidden_states",op_name:"pd_op.data",place:(pd_op.Place)Place(undefined:0),shape:(pd_op.IntArray)[1,-1,768],stop_gradient:[true],sym_shape_str:"shape[1, S0, 768], data[NULL]"} : () -> undefined_tensor<1x-1x768xf32>
+    (%2) = "shadow_feed(phi_kernel)" (%1) {kernel_key:<backend:GPU|layout:Undefined(AnyLayout)|dtype:float32>,kernel_name:"shadow_feed",op_name:"pd_op.shadow_feed"} : (undefined_tensor<1x-1x768xf32>) -> gpu_tensor<1x-1x768xf32>
+    (%3) = "cinn_runtime.jit_kernel" (%2, %0) {kernel_info:(0x7f5d2f487850)} : (gpu_tensor<1x-1x768xf32>, gpu_tensor<768xf32>) -> gpu_tensor<1x-1x768xf32>
+    () = "builtin.shadow_output" (%3) {output_name:"output_0",sym_shape_str:"shape[1, S0, 768], data[NULL]"} : (gpu_tensor<1x-1x768xf32>) -> 
+}
+
+all prim enabled:  True
+device name:  NVIDIA A100-PCIE-40GB
+all prim enabled:  True
+all prim enabled:  True
+all prim enabled:  True
+all prim enabled:  True
+Time costs: 1122.867 ms / time
