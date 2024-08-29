@@ -15,6 +15,7 @@ import timeit
 import argparse 
 import config
 import paddle
+import utils
 
 def attention(query, key, value):
     head_dim = query.shape[-1]
@@ -68,21 +69,17 @@ if __name__ == '__main__':
     query1 = paddle.transpose(query, [0, 2, 1, 3])
     key1 = paddle.transpose(key, [0, 2, 1, 3])
     value1 = paddle.transpose(value, [0, 2, 1, 3])
-    # query.stop_gradient = True
-    # key.stop_gradient = True
-    # value.stop_gradient = True
-    
     
     output_our = attention(query, key, value)
     tuple_output_flash = paddle.nn.functional.flash_attention.flash_attention(query1, key1, value1)
     output_flash = tuple_output_flash[0]
-    output_flash = paddle.reshape(output_flash, [batch_size, num_heads, seq_len, head_dim])
-    
-    # print("after_softmax_our", after_softmax_our)
-    # print("after_softmax_flash", after_softmax_flash)
+    output_flash = paddle.transpose(output_flash, [0, 2, 1, 3])
+        
     
     print("output_flash:  ", output_flash)
     print("output_our:    ", output_our)
     
-    print(paddle.equal(output_flash, output_our))
+    utils.check_equal(output_flash, output_flash)
+    
+    # print(paddle.equal(output_flash, output_our))
     
