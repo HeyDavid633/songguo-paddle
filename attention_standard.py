@@ -71,10 +71,10 @@ if __name__ == '__main__':
     key.stop_gradient = False
     value.stop_gradient = False
 
-    mask = paddle.nn.functional.dropout(paddle.ones([seq_len, seq_len])).expand([batch_size, num_heads, seq_len, seq_len])
-    sp_mask = mask.reshape([-1, seq_len, seq_len]).to_sparse_csr()
-    kp_mask = paddle.randint(0, 2, [batch_size, seq_len]).astype(paddle.float16)
-    attn_mask = paddle.randint(0, 2, [seq_len, seq_len]).astype(paddle.float16)
+    # mask = paddle.nn.functional.dropout(paddle.ones([seq_len, seq_len])).expand([batch_size, num_heads, seq_len, seq_len])
+    # sp_mask = mask.reshape([-1, seq_len, seq_len]).to_sparse_csr()
+    # kp_mask = paddle.randint(0, 2, [batch_size, seq_len]).astype(paddle.float16)
+    # attn_mask = paddle.randint(0, 2, [seq_len, seq_len]).astype(paddle.float16)
     
     input_spec = [
         InputSpec(shape=[batch_size, num_heads, seq_len, head_dim], dtype='float16'),
