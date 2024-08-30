@@ -35,3 +35,19 @@ def check_equal(tensor_a, tensor_b, tolerance=0.0001):
   
     # 打印相等比率  
     print(f"Equality ratio: {equality_ratio_value:.2f}%")  
+    
+    
+def print_hyperparameter(batch_size, seq_len, num_heads, head_dim, warmup_times, running_times):
+    print("-"*5, "Hyperparameter Argument", "-"*5)
+    print("{:13} : {:5}".format('batch_size', batch_size))
+    print("{:13} : {:5}".format('seq_len', seq_len))
+    print("{:13} : {:5}".format('num_heads', num_heads))
+    print("{:13} : {:5}\n".format('head_dim', head_dim))
+    print("{:13} : {:5}".format('warmup_times', warmup_times))
+    print("{:13} : {:5}".format('running_times', running_times))
+    print("-"*35)
+    
+def print_gpu_specific():
+    # set running device as gpu | specific --> A100
+    paddle.device.set_device('gpu:0')
+    print("device name: ", paddle.device.cuda.get_device_name())

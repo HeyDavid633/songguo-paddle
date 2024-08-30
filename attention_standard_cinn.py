@@ -1,10 +1,7 @@
-# 8.28 attention_standard 
-# 
-# 只测试fp16精度 因为 attention_flash只支持fp16
-# 此处为自己手写的attention标准计算流程，对于class Attnetion包起来的部分 对性能影响不大
+# 8.29 attention_standard for cinn
 #
-# python attention_standard.py
-# python attention_standard.py -batch_size 16 -head_dim 32 -seq_len 128  
+# python attention_standard_cinn.py
+# python attention_standard_cinn.py -batch_size 16 -head_dim 32 -seq_len 128  
 import timeit
 import argparse 
 import config
@@ -21,13 +18,6 @@ class Attention(paddle.nn.Layer):
         probs = paddle.nn.functional.softmax(scores, axis=-1) 
         h = paddle.matmul(probs, value) 
         return h
-
-def attention(query, key, value):
-    scores = paddle.matmul(query, key, transpose_y=True) / (head_dim ** 0.5) 
-    probs = paddle.nn.functional.softmax(scores, axis=-1) 
-    h = paddle.matmul(probs, value) 
-    return h
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -55,8 +45,7 @@ if __name__ == '__main__':
     
     # print_hyperparameter(batch_size, seq_len, num_heads, head_dim, warmup_times, running_times)
     # print_gpu_specific()
-    
-    
+
     # randn for init input
     paddle.seed(1)
     
@@ -80,6 +69,7 @@ if __name__ == '__main__':
 
 
     net = Attention()
+    
     net = paddle.jit.to_static(
         net,
         input_spec=input_spec,
@@ -90,13 +80,13 @@ if __name__ == '__main__':
     for _ in range(warmup_times + running_times):
         if _ == warmup_times-1:
             start_time = timeit.default_timer()
-        out = attention(query, key, value)
+        out = net(query, key, value)
         
     paddle.device.synchronize()
     end_time = timeit.default_timer()
 
-    print("StandAttention | {:2d} | {:2d} | {:4d} |  Time costs: {:.3f} ms / time".format(batch_size, head_dim, seq_len, (end_time - start_time) * 1000 / running_times)) 
+    print("CINN Attention | {:2d} | {:2d} | {:4d} |  Time costs: {:.3f} ms / time".format(batch_size, head_dim, seq_len, (end_time - start_time) * 1000 / running_times)) 
         
-    attn_standard_filename = 'attn_standard_time.txt'
-    with open(attn_standard_filename, 'a') as f: 
-        print("StandAttention | {:2d} | {:2d} | {:4d} |  Time costs: {:.3f} ms / time".format(batch_size, head_dim, seq_len, (end_time - start_time) * 1000 / running_times), file=f) 
+    attn_cinn_filename = 'attn_cinn_time.txt'
+    with open(attn_cinn_filename, 'a') as f: 
+        print("CINN Attention | {:2d} | {:2d} | {:4d} |  Time costs: {:.3f} ms / time".format(batch_size, head_dim, seq_len, (end_time - start_time) * 1000 / running_times), file=f) 

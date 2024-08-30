@@ -9,13 +9,13 @@
 # 
 # 
 # python attention_flash.py
-# python attention_flash.py -batch_size 16 -seq_len 128 
+# python attention_flash.py -batch_size 16 -head_dim 32 -seq_len 128 
 
 import timeit
 import argparse 
 import config
 import paddle
-import utils
+from utils import print_hyperparameter, check_equal, print_gpu_specific
 
 def attention(query, key, value):
     head_dim = query.shape[-1]
@@ -27,6 +27,7 @@ def attention(query, key, value):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-batch_size', type = int, required=False, help='batch_size which 1 | 8 | 16')
+    parser.add_argument('-head_dim', type = int, required=False, help='head_dim which 32 | 64')
     parser.add_argument('-seq_len', type = int, required=False, help='sequence length 128 ~ 2k, FlashAtten max as 16k in H100(80G)')
     args = parser.parse_args()
     
@@ -34,28 +35,22 @@ if __name__ == '__main__':
         batch_size = args.batch_size
     else:
         batch_size = config.BATCH_SIZE
+    if args.head_dim != None:
+        head_dim = args.head_dim
+    else:
+        head_dim = config.HEAD_DIM
     if args.seq_len != None:
         seq_len = args.seq_len
     else:
         seq_len = config.SEQ_LEN
     
     num_heads = config.HEADS_NUM
-    head_dim = config.HEAD_DIM
     warmup_times = config.WARMUP_TIME
     running_times = config.RUNNING_TIME
     
-    print("-"*5, "Hyperparameter Argument", "-"*5)
-    print("{:13} : {:5}".format('batch_size', batch_size))
-    print("{:13} : {:5}".format('seq_len', seq_len))
-    print("{:13} : {:5}".format('num_heads', num_heads))
-    print("{:13} : {:5}\n".format('head_dim', head_dim))
-    print("{:13} : {:5}".format('warmup_times', warmup_times))
-    print("{:13} : {:5}".format('running_times', running_times))
-    print("-"*30)
+    # print_hyperparameter(batch_size, seq_len, num_heads, head_dim, warmup_times, running_times)
+    # print_gpu_specific()
     
-    # set running device as gpu | specfic --> A100
-    paddle.device.set_device('gpu')
-    print("device name: ", paddle.device.cuda.get_device_name())
     
     # randn for init input
     paddle.seed(1)
@@ -70,16 +65,25 @@ if __name__ == '__main__':
     key1 = paddle.transpose(key, [0, 2, 1, 3])
     value1 = paddle.transpose(value, [0, 2, 1, 3])
     
+    # to check
     output_our = attention(query, key, value)
-    tuple_output_flash = paddle.nn.functional.flash_attention.flash_attention(query1, key1, value1)
-    output_flash = tuple_output_flash[0]
-    output_flash = paddle.transpose(output_flash, [0, 2, 1, 3])
+    
+    for _ in range(warmup_times + running_times):
+        if _ == warmup_times-1:
+            start_time = timeit.default_timer()
+        tuple_output_flash = paddle.nn.functional.flash_attention.flash_attention(query1, key1, value1)
+        output_flash = tuple_output_flash[0]
+        output_flash = paddle.transpose(output_flash, [0, 2, 1, 3])
+    
+    paddle.device.synchronize()
+    end_time = timeit.default_timer()
         
+    check_equal(output_flash, output_flash)
     
-    print("output_flash:  ", output_flash)
-    print("output_our:    ", output_our)
+    print("FlashAttention | {:2d} | {:2d} | {:4d} |  Time costs: {:.3f} ms / time".format(batch_size, head_dim, seq_len, (end_time - start_time) * 1000 / running_times)) 
     
-    utils.check_equal(output_flash, output_flash)
-    
-    # print(paddle.equal(output_flash, output_our))
+    attn_flash_filename = 'attn_flash_time.txt'
+    with open(attn_flash_filename, 'a') as f: 
+        print("FlashAttention | {:2d} | {:2d} | {:4d} |  Time costs: {:.3f} ms / time".format(batch_size, head_dim, seq_len, (end_time - start_time) * 1000 / running_times), file=f) 
+
     
