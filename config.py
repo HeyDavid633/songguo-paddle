@@ -6,7 +6,7 @@ TIME_NOW = datetime.now().strftime(DATE_FORMAT)
 
 
 WARMUP_TIME = 20
-RUNNING_TIME = 20
+RUNNING_TIME = 100
 
 # hyperparameter
 # BATCH_SIZE = 1
