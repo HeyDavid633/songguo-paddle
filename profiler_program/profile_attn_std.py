@@ -13,6 +13,7 @@ import paddle.profiler as profiler
 from utils import print_hyperparameter, print_gpu_specific
 
 def attention(query, key, value):
+    head_dim = query.shape[-1]
     scores = paddle.matmul(query, key, transpose_y=True) / (head_dim ** 0.5) 
     probs = paddle.nn.functional.softmax(scores, axis=-1) 
     h = paddle.matmul(probs, value) 

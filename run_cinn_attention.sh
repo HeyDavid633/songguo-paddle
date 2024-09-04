@@ -13,4 +13,5 @@ export FLAGS_enable_pir_api=true
 # 是否打印 Program IR 信息
 export FLAGS_print_ir=false
 
-python attention_standard_cinn.py 
+# python attention_standard_cinn.py 
+python attn_rope_cinn.py
